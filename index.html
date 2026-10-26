@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taverna Virtual · Sala</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="gate"><div class="gbox">
+  <h1>⚔ Taverna Virtual</h1>
+  <div class="note" id="gSt" style="margin:8px 0">Conectando…</div>
+  <h2>Quem é você nesta sessão?</h2>
+  <div class="row"><button id="gM" disabled>👑 Mestre</button><button id="gP" disabled>🛡 Jogador</button></div>
+  <label for="gN">Seu nome</label><input id="gN" maxlength="30" autocomplete="username">
+  <label for="gW">Senha</label><input id="gW" type="password" autocomplete="current-password">
+  <div id="gC"><label for="gW2">Repita a senha</label><input id="gW2" type="password" autocomplete="new-password"></div>
+  <div class="err" id="gE" style="margin-top:8px"></div>
+  <button class="go" id="gGo" disabled>Entrar</button>
+  <p class="note">Só pode haver um mestre por sessão. Quem entra como jogador cria nome e senha antes de confirmar.</p>
+</div></div>
+<header>
+  <h1>⚔ Taverna Virtual</h1>
+  <div class="top">
+    <button class="go" id="hCall">🎙 Entrar na call</button><button class="danger" id="endCall" style="display:none">⛔ Encerrar call</button><span class="note" id="hNote"></span>
+    <span class="badge" id="conn">Modo local</span>
+    <span class="badge" id="role">Jogador</span>
+    <button id="roleBtn" style="display:none" title="Só no modo local: alterna entre jogador e mestre">Alternar papel (teste)</button>
+    
+  </div>
+</header>
+<div id="notif" class="notif" style="display:none"></div>
+<main>
+  <section class="panel tela" id="telaSec" aria-label="Telão do mestre">
+    <div id="telaBox"></div>
+    <div id="telaBar"><span class="note" id="telaTitle">Telão</span><span class="row" style="margin:0"><button id="shToggle" style="display:none"></button><button id="shNext" style="display:none" title="Trocar de tela compartilhada">⇄</button><button id="zO" title="Reduzir">−</button><button id="zI" title="Ampliar">+</button><button id="zR" title="Restaurar">1:1</button><button id="zF" title="Tela cheia">⛶ Tela cheia</button></span></div>
+  </section>
+
+  <section class="panel gente">
+    <h2>Participantes</h2>
+    <ul class="people" id="people"></ul>
+    <h2>Call de voz</h2>
+    <div class="row"><button id="callBtn">🎙 Entrar na call</button><button id="muteBtn" style="display:none">Mutar</button><button id="nsBtn" style="display:none">🔇 Ruído: suprimido</button><button id="shareBtn" style="display:none" title="Mostrar sua tela para quem está na call">🖥 Compartilhar tela</button></div>
+    <ul class="people" id="callList"></ul><div id="callAudio"></div><div class="note" id="callNote"></div>
+    <div style="height:10px"></div>
+    <label for="player">Seu nome</label><input id="player" maxlength="30" placeholder="Seu nome">
+    <div style="height:8px"></div>
+    <label for="char">Personagem</label><input id="char" maxlength="30" placeholder="Nome do personagem">
+  </section>
+
+  <section class="panel abas">
+    <div class="tabs">
+      <button class="on" data-tab="dados">🎲 Dados</button>
+      <button data-tab="chat">💬 Chat</button>
+      <button data-tab="ficha">📜 Fichas</button>
+      <button data-tab="inv">🎒 Inventário</button>
+      <button data-tab="perfil">🪪 Perfil</button>
+      <button data-tab="status">📊 Status</button>
+      <button data-tab="cbt">⚔️ Combate</button>
+      <button data-tab="npcs">👹 NPCs e Bosses</button>
+      <button data-tab="tela" id="tabTela" style="display:none">🖼 Telão</button>
+    </div>
+    <div class="cols" id="p-dados">
+      <div class="stage" aria-live="polite">
+        <div class="die" id="die">d20</div>
+        <div class="total" id="total"></div>
+        <div class="detail" id="detail">Escolha um dado e role.</div>
+      </div>
+      <div>
+        <h2>Rolar dados</h2>
+        <div class="row dice" id="dice"></div>
+        <div class="row">
+          <div><label for="qty">Quantidade</label><input class="n" id="qty" type="number" min="1" max="50" value="1"></div>
+          <div><label for="mod">Modificador</label><input class="n" id="mod" type="number" min="-999" max="999" value="0"></div>
+          <div style="flex:1;min-width:130px"><label for="expr">Ou digite (ex.: 2d8+3)</label><input id="expr" placeholder="1d20+5" autocomplete="off"></div>
+        </div>
+        <div class="row">
+          <button class="go" id="rollBtn">Rolar</button>
+          <button id="secretBtn" style="display:none">Rolagem secreta: não</button>
+        </div>
+        <div class="err" id="err"></div>
+        <div class="row" id="quick"></div>
+      </div>
+      <div style="grid-column:1/-1">
+        <h2>Histórico de rolagens</h2>
+        <ul class="log" id="log"></ul>
+        <div class="row" style="margin:10px 0 0">
+          <button class="danger" id="clearBtn" style="display:none">Limpar histórico (mestre)</button>
+          <span class="note" id="logNote"></span>
+        </div>
+      </div>
+    </div>
+    <div id="p-pick" class="row" style="display:none"><label for="sel" style="margin:0">Personagem</label><select id="sel"></select></div>
+    <div id="p-chat" style="display:none">
+      <div class="row"><button id="chG" class="on">Geral</button><button id="chM" style="display:none">Canal do mestre</button></div>
+      <ul class="log" id="cl"></ul>
+      <div class="row" style="margin-top:10px"><input id="ci" maxlength="500" placeholder="Escreva uma mensagem" style="flex:1"><button class="go" id="cs">Enviar</button><button id="ca" style="display:none">📢 Enviar aviso</button></div>
+    </div>
+    <div id="p-ficha" style="display:none"></div>
+    <div id="p-inv" style="display:none"></div>
+    <div id="p-perfil" style="display:none"></div>
+    <div id="p-status" style="display:none"></div>
+    <div id="p-cbt" style="display:none"></div>
+    <div id="p-npcs" style="display:none"></div>
+    <div id="p-tela" style="display:none"></div>
+  </section>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
